@@ -1,7 +1,11 @@
 export const createElementByTag = (tag, className = '', text = false, attributeName = false, attributeValue = false) => {
-    const newElememt = document.createElement('div');
+    const newElememt = document.createElement(tag);
 
-    newElememt.classList.add(className);
+    if (className) {
+      className.split (' ').forEach(className => {
+        newElememt.classList.add(className);
+      })
+    }
     
     if (text && text.trim()) {
         newElememt.textContent = text;

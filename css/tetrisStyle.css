@@ -1,5 +1,38 @@
 .tetris {
-    width: 100px;
-    height: 100px;
-    background-color: red;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    align-items: flex-start;
+}
+
+.score {
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.tetrisfield {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.row {
+    display: flex;
+    gap: 3px;
+}
+
+.cell {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 25px;
+    background-color: rgb(36, 37, 37);
+    border-radius: 5px;
+}
+
+.full_cell {
+    border: 5px solid rgb(255, 255, 255);
 }
