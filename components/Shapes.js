@@ -122,6 +122,25 @@ const Shapes = class {
         }
     }
 
+    findFilledCells() {
+        //ToDo
+        const arrayFilledCells = [];     
+
+        for(let column = 0; column < this.shape.length; column++) {
+            for(let row = 0; row < this.shape[0].length; row++) {
+                if (this.shape[column][row] === 0) {
+                    break;
+                }
+
+                arrayFilledCells.push(this.shape[column][row]);
+            }
+        }
+
+        
+
+        console.log(arrayFilledCells)
+    }
+
     stepDown(lastPosition) {
         const bottomPixelPosition = this.shape[this.shape.length - 1][0].pixelPosition.x;
 

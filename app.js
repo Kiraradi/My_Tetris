@@ -1,6 +1,6 @@
 import Tetris from "./components/Tetris.js";
 
-const tetrisWrapper = document.querySelector('.tetris_wrapper');
+const tetrisWrapper = document.getElementById('tetris_wrapper');
 
 const tetris = new Tetris();
 
