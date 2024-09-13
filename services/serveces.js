@@ -17,5 +17,16 @@ export const createElementByTag = (tag, className = '', text = false, attributeN
       return newElememt
     }
 
+    export const createArrayBySize =  (column, row) => {
+
+          return Array.from({length: column},() => Array.from({length:row}, () => {
+            return {
+              pixelPosition: {x:0, y:0},
+              pixelContent: 1 
+          }
+          }));
+       
+    }
+
 
     
