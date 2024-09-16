@@ -13,33 +13,29 @@ const Shapes = class {
     }
 
     createShape() {
-         if(this.currentType === 'o') {
-            this.shape = this.createShapeTypeO();
-         }
-
-         if(this.currentType === 'i') {
-            this.shape = this.createShapeTypeI();
-         }
-
-         if(this.currentType === 't') {
-            this.shape = this.createShapeTypeT();
-         }
-
-         if(this.currentType === 'z') {
-            this.shape = this.createShapeTypeZ();
-         }
-
-         if(this.currentType === 's') {
-            this.shape = this.createShapeTypeS();
-         }
-
-         if(this.currentType === 'l') {
-            this.shape = this.createShapeTypeL();
-         }
-
-         if(this.currentType === 'j') {
-            this.shape = this.createShapeTypeJ();
-         }
+        switch (this.currentType) {
+            case 'o':
+                this.shape = this.createShapeTypeO();
+                break;
+            case 'i':
+                this.shape = this.createShapeTypeI();
+                break;
+            case 't':
+                this.shape = this.createShapeTypeT();
+                break;
+            case 'z':
+                this.shape = this.createShapeTypeZ();
+                break;
+            case 's':
+                this.shape = this.createShapeTypeS();
+                break;
+            case 'l':
+                this.shape = this.createShapeTypeL();
+                break;
+            case 'j':
+                this.shape = this.createShapeTypeJ();
+                break;
+        }
     }
 
     createShapeTypeO() {
@@ -122,23 +118,49 @@ const Shapes = class {
         }
     }
 
-    findFilledCells() {
-        //ToDo
+    findFilledCellsAtBottom() {
         const arrayFilledCells = [];     
+
+        for(let row = 0; row < this.shape[0].length; row++) {
+            for(let column = this.shape.length - 1; column >=0 ; column--) {
+                if(this.shape[column][row].pixelContent === 1) {
+                    arrayFilledCells.push(this.shape[column][row]);
+                    break;
+                }
+            }
+        }        
+
+        return arrayFilledCells
+    }
+
+    findFilledCellsOnLeft() {
+        const arrayFilledCells = []; 
 
         for(let column = 0; column < this.shape.length; column++) {
             for(let row = 0; row < this.shape[0].length; row++) {
-                if (this.shape[column][row] === 0) {
+                if (this.shape[column][row].pixelContent === 1) {
+                    arrayFilledCells.push(this.shape[column][row]);
                     break;
                 }
-
-                arrayFilledCells.push(this.shape[column][row]);
             }
         }
 
-        
+        return arrayFilledCells;
+    }
 
-        console.log(arrayFilledCells)
+    findFilledCellsOnRight() {
+        const arrayFilledCells = []; 
+
+        for(let column = 0; column < this.shape.length; column++) {
+            for(let row = this.shape[0].length - 1; row >= 0; row--) {
+                if (this.shape[column][row].pixelContent === 1) {
+                    arrayFilledCells.push(this.shape[column][row]);
+                    break;
+                }
+            }
+        }
+
+        return arrayFilledCells;
     }
 
     stepDown(lastPosition) {
@@ -172,6 +194,10 @@ const Shapes = class {
         })
 
     }
+
+    shapeTurn() {
+
+    } 
 
 
 }

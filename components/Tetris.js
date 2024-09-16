@@ -52,7 +52,7 @@ const Tetris = class {
     reRender() {
         this.currentShape.shape.flat().forEach(pixel => {
             if (pixel.pixelPosition.x >= 0 && pixel.pixelPosition.y >= 0) {
-                if(this.field[pixel.pixelPosition.x][pixel.pixelPosition.y] === 0) {
+                if(this.field[pixel.pixelPosition.x][pixel.pixelPosition.y] === 0 && pixel.pixelContent === 1) {
                     this.field[pixel.pixelPosition.x][pixel.pixelPosition.y] = pixel.pixelContent;
                 }
                 
@@ -64,7 +64,7 @@ const Tetris = class {
 
     deleteLastPositionShape() {
         this.currentShape.shape.flat().forEach(pixel => {
-            if (pixel.pixelPosition.x >= 0 && pixel.pixelPosition.y >= 0) {
+            if (pixel.pixelPosition.x >= 0 && pixel.pixelPosition.y >= 0 && pixel.pixelContent === 1) {
                 this.field[pixel.pixelPosition.x][pixel.pixelPosition.y] = 0;
             }
         });
@@ -79,15 +79,19 @@ const Tetris = class {
     }
 
     onStepLeft() {
-        this.deleteLastPositionShape();
-        this.currentShape.stepLeft();
-        this.reRender();
+        if (this.checkLeftOffset()) {
+            this.deleteLastPositionShape();
+            this.currentShape.stepLeft();
+            this.reRender();
+        } 
     }
 
     onStepRight() {
-        this.deleteLastPositionShape();
-        this.currentShape.stepRight(this.field[0].length - 1);
-        this.reRender();
+        if (this.checkRightOffset()) {
+            this.deleteLastPositionShape();
+            this.currentShape.stepRight(this.field[0].length - 1);
+            this.reRender();
+        }
     }
 
     initNewShape() {
@@ -95,25 +99,18 @@ const Tetris = class {
     }
 
     isShapeAtBottom() {
-        const lastColumnInShape = this.currentShape.shape[this.currentShape.shape.length - 1];
-        //Todo
-        //this.currentShape.findFilledCells()
+        const arrayOfFullCells = this.currentShape.findFilledCellsAtBottom();        
 
-        const verificationArray = lastColumnInShape.reduce((acc, pixel) => {
+        const verificationArray = arrayOfFullCells.reduce((acc, pixel) => {
             const nextPositionX = pixel.pixelPosition.x + 1;
             const nextPositionY = pixel.pixelPosition.y;
             
             if (nextPositionX > this.columnsInField - 1) {
                 acc.push(false);
             } else {
-                if (pixel.pixelContent === 0) {
-                    const checkingAvailabilityOfCell = this.field[nextPositionX][nextPositionY] + pixel.pixelContent < 2;
-                }else {
-                    const checkingAvailabilityOfCell = this.field[nextPositionX][nextPositionY] + pixel.pixelContent < 2;
+                const isCellAvailable = this.field[nextPositionX][nextPositionY] + pixel.pixelContent < 2;
 
-                    acc.push(checkingAvailabilityOfCell);
-                }
-                
+                acc.push(isCellAvailable); 
             }
 
             return acc;
@@ -122,24 +119,73 @@ const Tetris = class {
         if(verificationArray.some(el => el === false)) {
             this.initNewShape();
         }
-      
+    }
+
+    checkLeftOffset() {
+        const arrayOfFullCells = this.currentShape.findFilledCellsOnLeft(); 
+
+        const verificationArray = arrayOfFullCells.reduce((acc, pixel) => {
+            const nextPositionX = pixel.pixelPosition.x;
+            const nextPositionY = pixel.pixelPosition.y - 1;
+
+            if (nextPositionY < 0) {
+                acc.push(false);
+            } else {
+                if (this.field[nextPositionX] === undefined) {
+                    acc.push(true)
+                } else {
+                    const isCellAvailable = this.field[nextPositionX][nextPositionY] + pixel.pixelContent < 2;
+                    acc.push(isCellAvailable); 
+                }                
+            }
+
+            return acc;
+        }, [])
+
+        return verificationArray.every(el => el === true)
+    }
+
+    checkRightOffset() {
+        const arrayOfFullCells = this.currentShape.findFilledCellsOnRight();
+        
+        const verificationArray = arrayOfFullCells.reduce((acc, pixel) => {
+            const nextPositionX = pixel.pixelPosition.x;
+            const nextPositionY = pixel.pixelPosition.y + 1;
+
+            if (nextPositionY < 0) {
+                acc.push(false);
+            } else {
+                if (this.field[nextPositionX] === undefined) {
+                    acc.push(true)
+                } else {
+                    const isCellAvailable = this.field[nextPositionX][nextPositionY] + pixel.pixelContent < 2;
+                    acc.push(isCellAvailable); 
+                }                
+            }
+
+            return acc;
+        }, [])
+
+        return verificationArray.every(el => el === true)
     }
 
 
     subscribeToEvents() {
         document.addEventListener('keydown', (event) => {
             event.preventDefault();
-            if (event.code === 'ArrowDown') {
-                this.onStepDown();
-            }
-
-            if (event.code === 'ArrowLeft') {
-                this.onStepLeft();
-            }
-
-            if (event.code === 'ArrowRight') {
-                this.onStepRight();
-            }            
+            switch (event.code) {
+                case 'ArrowDown':
+                    this.onStepDown();
+                    break;
+                case 'ArrowLeft':
+                    this.onStepLeft();
+                    break;
+                case 'ArrowRight':
+                    this.onStepRight();
+                    break;
+                case 'ArrowUp':
+                    break;
+            }           
         })
     }
 }
