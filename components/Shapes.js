@@ -1,13 +1,19 @@
 import { createArrayBySize } from "../services/serveces.js";
 const Shapes = class {
+    currentType = this.#setRandomType();
+    shape = null;
+    currentRotate = 0;
+ 
     constructor (startPosition) {        
-        this.currentType = this.#setRandomType();
+        // this.currentType = this.#setRandomType();
         this.startPosition = startPosition;
-        this.shape = null;
+        // this.shape = null;
+        // this.currentRotate = 0;
         this.createShape();        
     }
 
-    #setRandomType() {
+    #setRandomType() {     
+        //['i', 'o', 't', 'z', 's', 'l', 'j']   
         const types = ['i', 'o', 't', 'z', 's', 'l', 'j'];
         return types[Math.floor(Math.random() * types.length)];
     }
@@ -18,22 +24,22 @@ const Shapes = class {
                 this.shape = this.createShapeTypeO();
                 break;
             case 'i':
-                this.shape = this.createShapeTypeI();
+                this.shape = this.createShapeTypeI_0(this.startPosition);
                 break;
             case 't':
-                this.shape = this.createShapeTypeT();
+                this.shape = this.createShapeTypeT_0(this.startPosition);
                 break;
             case 'z':
-                this.shape = this.createShapeTypeZ();
+                this.shape = this.createShapeTypeZ_0(this.startPosition);
                 break;
             case 's':
-                this.shape = this.createShapeTypeS();
+                this.shape = this.createShapeTypeS_0(this.startPosition);
                 break;
             case 'l':
-                this.shape = this.createShapeTypeL();
+                this.shape = this.createShapeTypeL_0(this.startPosition);
                 break;
             case 'j':
-                this.shape = this.createShapeTypeJ();
+                this.shape = this.createShapeTypeJ_0(this.startPosition);
                 break;
         }
     }
@@ -41,23 +47,31 @@ const Shapes = class {
     createShapeTypeO() {
         const bodyShapeForTypeO = createArrayBySize(2, 2);
 
-        this.fillStartPosition(bodyShapeForTypeO);
+        this.fillStartPosition(bodyShapeForTypeO, this.startPosition);
 
         return bodyShapeForTypeO;
     }
 
-    createShapeTypeI() {
+    createShapeTypeI_0(startPosition) {
         const bodyShapeForTypeI = createArrayBySize(4, 1);
         
-        this.fillStartPosition(bodyShapeForTypeI); 
+        this.fillStartPosition(bodyShapeForTypeI, startPosition); 
 
         return bodyShapeForTypeI
     }
 
-    createShapeTypeT() {
+    createShapeTypeI_90(startPosition) {
+        const bodyShapeForTypeI = createArrayBySize(1, 4);
+        
+        this.fillStartPosition(bodyShapeForTypeI, startPosition); 
+
+        return bodyShapeForTypeI
+    }
+
+    createShapeTypeT_0(startPosition) {
         const bodyShapeForTypeT = createArrayBySize(2, 3);
 
-        this.fillStartPosition(bodyShapeForTypeT);
+        this.fillStartPosition(bodyShapeForTypeT, startPosition);
 
         bodyShapeForTypeT[0][0].pixelContent = 0;
         bodyShapeForTypeT[0][2].pixelContent = 0;
@@ -65,10 +79,43 @@ const Shapes = class {
         return bodyShapeForTypeT;
     }
 
-    createShapeTypeZ() {
+    createShapeTypeT_90(startPosition) {
+        const bodyShapeForTypeT = createArrayBySize(3, 2);
+
+        this.fillStartPosition(bodyShapeForTypeT, startPosition);
+
+        bodyShapeForTypeT[0][1].pixelContent = 0;
+        bodyShapeForTypeT[2][1].pixelContent = 0;
+
+        return bodyShapeForTypeT;
+    }
+
+    createShapeTypeT_180(startPosition) {
+        const bodyShapeForTypeT = createArrayBySize(2, 3);
+
+        this.fillStartPosition(bodyShapeForTypeT, startPosition);
+
+        bodyShapeForTypeT[1][0].pixelContent = 0;
+        bodyShapeForTypeT[1][2].pixelContent = 0;
+
+        return bodyShapeForTypeT;
+    }
+
+    createShapeTypeT_270(startPosition) {
+        const bodyShapeForTypeT = createArrayBySize(3, 2);
+
+        this.fillStartPosition(bodyShapeForTypeT, startPosition);
+
+        bodyShapeForTypeT[0][0].pixelContent = 0;
+        bodyShapeForTypeT[2][0].pixelContent = 0;
+
+        return bodyShapeForTypeT;
+    }
+
+    createShapeTypeZ_0(startPosition) {
         const bodyShapeForTypeZ = createArrayBySize(3, 2);
 
-        this.fillStartPosition(bodyShapeForTypeZ);
+        this.fillStartPosition(bodyShapeForTypeZ, startPosition);
 
         bodyShapeForTypeZ[0][0].pixelContent = 0;
         bodyShapeForTypeZ[2][1].pixelContent = 0;
@@ -76,10 +123,21 @@ const Shapes = class {
         return bodyShapeForTypeZ;
     }
 
-    createShapeTypeS() {
+    createShapeTypeZ_90(startPosition) {
+        const bodyShapeForTypeZ = createArrayBySize(2, 3);
+
+        this.fillStartPosition(bodyShapeForTypeZ, startPosition);
+
+        bodyShapeForTypeZ[0][2].pixelContent = 0;
+        bodyShapeForTypeZ[1][0].pixelContent = 0;
+
+        return bodyShapeForTypeZ;
+    }
+
+    createShapeTypeS_0(startPosition) {
         const bodyShapeForTypeS = createArrayBySize(3, 2);
 
-        this.fillStartPosition(bodyShapeForTypeS);
+        this.fillStartPosition(bodyShapeForTypeS, startPosition);
 
         bodyShapeForTypeS[0][1].pixelContent = 0;
         bodyShapeForTypeS[2][0].pixelContent = 0;
@@ -87,10 +145,22 @@ const Shapes = class {
         return bodyShapeForTypeS;
     }
 
-    createShapeTypeL() {
+    createShapeTypeS_90(startPosition) {
+        const bodyShapeForTypeS = createArrayBySize(2, 3);
+
+        this.fillStartPosition(bodyShapeForTypeS, startPosition);
+
+        bodyShapeForTypeS[0][0].pixelContent = 0;
+        bodyShapeForTypeS[1][2].pixelContent = 0;
+
+        return bodyShapeForTypeS;
+    }
+    
+
+    createShapeTypeL_0(startPosition) {
         const bodyShapeForTypeL = createArrayBySize(3, 2);
 
-        this.fillStartPosition(bodyShapeForTypeL);
+        this.fillStartPosition(bodyShapeForTypeL, startPosition);
 
         bodyShapeForTypeL[0][1].pixelContent = 0;
         bodyShapeForTypeL[1][1].pixelContent = 0;
@@ -98,10 +168,43 @@ const Shapes = class {
         return bodyShapeForTypeL;
     }
 
-    createShapeTypeJ() {
+    createShapeTypeL_90(startPosition) {
+        const bodyShapeForTypeL = createArrayBySize(2, 3);
+
+        this.fillStartPosition(bodyShapeForTypeL, startPosition);
+
+        bodyShapeForTypeL[1][1].pixelContent = 0;
+        bodyShapeForTypeL[1][2].pixelContent = 0;
+
+        return bodyShapeForTypeL;
+    }
+
+    createShapeTypeL_180(startPosition) {
+        const bodyShapeForTypeL = createArrayBySize(3, 2);
+
+        this.fillStartPosition(bodyShapeForTypeL, startPosition);
+
+        bodyShapeForTypeL[1][0].pixelContent = 0;
+        bodyShapeForTypeL[2][0].pixelContent = 0;
+
+        return bodyShapeForTypeL;
+    }
+
+    createShapeTypeL_270(startPosition) {
+        const bodyShapeForTypeL = createArrayBySize(2, 3);
+
+        this.fillStartPosition(bodyShapeForTypeL, startPosition);
+
+        bodyShapeForTypeL[0][0].pixelContent = 0;
+        bodyShapeForTypeL[0][1].pixelContent = 0;
+
+        return bodyShapeForTypeL;
+    }
+
+    createShapeTypeJ_0(startPosition) {
         const bodyShapeForTypeJ = createArrayBySize(3, 2);
 
-        this.fillStartPosition(bodyShapeForTypeJ);
+        this.fillStartPosition(bodyShapeForTypeJ, startPosition);
 
         bodyShapeForTypeJ[0][0].pixelContent = 0;
         bodyShapeForTypeJ[1][0].pixelContent = 0;
@@ -109,11 +212,46 @@ const Shapes = class {
         return bodyShapeForTypeJ;
     }
 
-    fillStartPosition(shape) {
+    createShapeTypeJ_90(startPosition) {
+        const bodyShapeForTypeJ = createArrayBySize(2, 3);
+
+        this.fillStartPosition(bodyShapeForTypeJ, startPosition);
+
+        bodyShapeForTypeJ[0][1].pixelContent = 0;
+        bodyShapeForTypeJ[0][2].pixelContent = 0;
+
+        return bodyShapeForTypeJ;
+    }
+
+    createShapeTypeJ_180(startPosition) {
+        const bodyShapeForTypeJ = createArrayBySize(3, 2);
+
+
+
+        this.fillStartPosition(bodyShapeForTypeJ, startPosition);
+
+        bodyShapeForTypeJ[1][1].pixelContent = 0;
+        bodyShapeForTypeJ[2][1].pixelContent = 0;
+
+        return bodyShapeForTypeJ;
+    }
+
+    createShapeTypeJ_270(startPosition) {
+        const bodyShapeForTypeJ = createArrayBySize(2, 3);
+
+        this.fillStartPosition(bodyShapeForTypeJ, startPosition);
+
+        bodyShapeForTypeJ[1][0].pixelContent = 0;
+        bodyShapeForTypeJ[1][1].pixelContent = 0;
+
+        return bodyShapeForTypeJ;
+    }
+
+    fillStartPosition(shape, startPosition) {
         for(let column = 0; column < shape.length; column++) {
             for(let row = 0; row < shape[column].length; row++) {
-                shape[column][row].pixelPosition.x = this.startPosition.x - (shape.length ) + column;
-                shape[column][row].pixelPosition.y = this.startPosition.y + row;
+                shape[column][row].pixelPosition.x = startPosition.x - (shape.length - 1) + column;
+                shape[column][row].pixelPosition.y = startPosition.y + row;
             }
         }
     }
@@ -195,7 +333,106 @@ const Shapes = class {
 
     }
 
-    shapeTurn() {
+    shapeRotation() {
+        const newRotate = this.currentRotate + 90 > 270 ? 0 : this.currentRotate + 90;
+        const startPosition = this.shape[this.shape.length -1][0].pixelPosition;
+
+        if (this.currentType === 'i') {           
+            switch (newRotate) {
+                case 0:
+                case 180:
+                    this.shape = this.createShapeTypeI_0(startPosition);
+                    break;
+                case 90:
+                case 270:
+                    this.shape = this.createShapeTypeI_90(startPosition);
+                    break;
+            }
+            this.currentRotate = newRotate;
+        }
+
+        if (this.currentType === 'z') {            
+            switch (newRotate) {
+                case 0:
+                case 180:
+                    this.shape = this.createShapeTypeZ_0(startPosition);
+                    break;
+                case 90:
+                case 270:
+                    this.shape = this.createShapeTypeZ_90(startPosition);
+                    break;
+            }
+            this.currentRotate = newRotate;
+        }
+
+        if (this.currentType === 's') {            
+            switch (newRotate) {
+                case 0:
+                case 180:
+                    this.shape = this.createShapeTypeS_0(startPosition);
+                    break;
+                case 90:
+                case 270:
+                    this.shape = this.createShapeTypeS_90(startPosition);
+                    break;
+            }
+            this.currentRotate = newRotate;
+        }
+
+        if (this.currentType === 't') {            
+            switch (newRotate) {
+                case 0:
+                    this.shape = this.createShapeTypeT_0(startPosition);
+                    break;
+                case 90:
+                    this.shape = this.createShapeTypeT_90(startPosition);
+                    break;
+                case 180:
+                    this.shape = this.createShapeTypeT_180(startPosition);
+                    break;
+                case 270:
+                    this.shape = this.createShapeTypeT_270(startPosition);
+                    break;
+            }
+            this.currentRotate = newRotate;
+        }
+
+        if (this.currentType === 'l') {            
+            switch (newRotate) {
+                case 0:
+                    this.shape = this.createShapeTypeL_0(startPosition);
+                    break;
+                case 90:
+                    this.shape = this.createShapeTypeL_90(startPosition);
+                    break;
+                case 180:
+                    this.shape = this.createShapeTypeL_180(startPosition);
+                    break;
+                case 270:
+                    this.shape = this.createShapeTypeL_270(startPosition);
+                    break;
+            }
+            this.currentRotate = newRotate;
+        }
+
+        if (this.currentType === 'j') {            
+            switch (newRotate) {
+                case 0:
+                    this.shape = this.createShapeTypeJ_0(startPosition);
+                    break;
+                case 90:
+                    this.shape = this.createShapeTypeJ_90(startPosition);
+                    break;
+                case 180:
+                    this.shape = this.createShapeTypeJ_180(startPosition);
+                    break;
+                case 270:
+                    this.shape = this.createShapeTypeJ_270(startPosition);
+                    break;
+            }
+            this.currentRotate = newRotate;
+        }
+        
 
     } 
 
