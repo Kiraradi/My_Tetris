@@ -27,5 +27,12 @@ export const createElementByTag = (tag, className = '', text = false, attributeN
        
     }
 
+    export const checkingNumber = (number, min = 1, max = 10) => {
+      if (number < min) return min;
+      if (number >  max) return max;
+
+      return number;
+    }
+
 
     
