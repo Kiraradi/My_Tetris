@@ -30,6 +30,7 @@ const Tetris = class {
         this.initField();
 
         wrapperComponent.append(tetrisElem);
+        this.speed = prompt('Введите скоросто от 100 до 1000', 1000);
 
         this.subscribeToEvents();
         this.setInterval();
@@ -233,7 +234,6 @@ const Tetris = class {
     }
 
     gameOver() {
-        console.log(this.getRecord());
         this.setRecord();
         clearInterval(this.intervalId);
         alert(`Game over, your score ${this.score}`);
