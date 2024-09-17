@@ -10,8 +10,7 @@ const Shapes = class {
         this.canItRotate = () => {};
     }
 
-    #setRandomType() {     
-        //['i', 'o', 't', 'z', 's', 'l', 'j']   
+    #setRandomType() { 
         const types = ['i', 'o', 't', 'z', 's', 'l', 'j'];
         return types[Math.floor(Math.random() * types.length)];
     }
@@ -266,7 +265,7 @@ const Shapes = class {
             }
         }        
 
-        return arrayFilledCells
+        return arrayFilledCells;
     }
 
     findFilledCellsOnLeft() {
@@ -304,9 +303,8 @@ const Shapes = class {
 
         this.shape.forEach(column => {
             if (bottomPixelPosition < lastPosition) {
-                column.forEach(pixel => pixel.pixelPosition.x = ++pixel.pixelPosition.x)
-            }
-            
+                column.forEach(pixel => pixel.pixelPosition.x = ++pixel.pixelPosition.x);
+            }            
         })
     }
 
@@ -315,7 +313,7 @@ const Shapes = class {
 
         this.shape.forEach(column => {
             if (leftPixelPosition > 0) {
-                column.forEach(pixel => pixel.pixelPosition.y = --pixel.pixelPosition.y)
+                column.forEach(pixel => pixel.pixelPosition.y = --pixel.pixelPosition.y);
             }            
         })
     }
@@ -325,7 +323,7 @@ const Shapes = class {
         this.shape.forEach(column => {
             
             if (rightPixelPosition < lastPosition) {
-                column.forEach(pixel => pixel.pixelPosition.y = ++pixel.pixelPosition.y)
+                column.forEach(pixel => pixel.pixelPosition.y = ++pixel.pixelPosition.y);
             }            
         })
 
@@ -343,7 +341,7 @@ const Shapes = class {
     getNewRotation() {
         const newRotate = this.getNewRotateCorner();
         const startPosition = this.getStartPositionCurrentShape();
-        let newShapeRotate
+        let newShapeRotate;
         switch (this.currentType) {
             case 'i':
                 if (newRotate === 90 || newRotate === 270) {
@@ -401,10 +399,7 @@ const Shapes = class {
             this.currentRotate = this.getNewRotateCorner();
             this.shape = newShapeRotate;
         }
-
     }
-
-
 }
 
 export default Shapes;
