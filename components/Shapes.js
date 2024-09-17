@@ -5,11 +5,9 @@ const Shapes = class {
     currentRotate = 0;
  
     constructor (startPosition) {        
-        // this.currentType = this.#setRandomType();
         this.startPosition = startPosition;
-        // this.shape = null;
-        // this.currentRotate = 0;
-        this.createShape();        
+        this.createShape();     
+        this.canItRotate = () => {};
     }
 
     #setRandomType() {     
@@ -333,108 +331,78 @@ const Shapes = class {
 
     }
 
-    shapeRotation() {
-        const newRotate = this.currentRotate + 90 > 270 ? 0 : this.currentRotate + 90;
-        const startPosition = this.shape[this.shape.length -1][0].pixelPosition;
+    getNewRotateCorner() {
+        return this.currentRotate + 90 > 270 ? 0 : this.currentRotate + 90;
+    }
 
-        if (this.currentType === 'i') {           
-            switch (newRotate) {
-                case 0:
-                case 180:
-                    this.shape = this.createShapeTypeI_0(startPosition);
-                    break;
-                case 90:
-                case 270:
-                    this.shape = this.createShapeTypeI_90(startPosition);
-                    break;
-            }
-            this.currentRotate = newRotate;
+    getStartPositionCurrentShape() {
+        return this.shape[this.shape.length -1][0].pixelPosition;
+    }
+
+
+    getNewRotation() {
+        const newRotate = this.getNewRotateCorner();
+        const startPosition = this.getStartPositionCurrentShape();
+        let newShapeRotate
+        switch (this.currentType) {
+            case 'i':
+                if (newRotate === 90 || newRotate === 270) {
+                    newShapeRotate = this.createShapeTypeI_90(startPosition);
+                }
+                else {
+                    newShapeRotate = this.createShapeTypeI_0(startPosition);
+                }
+                break;
+            case 'z':
+                if (newRotate === 90 || newRotate === 270) {
+                    newShapeRotate = this.createShapeTypeZ_90(startPosition);
+                }
+                else {
+                    newShapeRotate = this.createShapeTypeZ_0(startPosition);
+                }
+                break;
+            case 's':
+                if (newRotate === 90 || newRotate === 270) {
+                    newShapeRotate = this.createShapeTypeS_90(startPosition);
+                }
+                else {
+                    newShapeRotate = this.createShapeTypeS_0(startPosition);
+                }
+                break;
+            case 't': 
+                if (newRotate === 0) newShapeRotate = this.createShapeTypeT_0(startPosition);
+                if (newRotate === 90) newShapeRotate = this.createShapeTypeT_90(startPosition);
+                if (newRotate === 180) newShapeRotate = this.createShapeTypeT_180(startPosition);
+                if (newRotate === 270) newShapeRotate = this.createShapeTypeT_270(startPosition);
+                break;
+            case 'l': 
+                if (newRotate === 0) newShapeRotate = this.createShapeTypeL_0(startPosition);
+                if (newRotate === 90) newShapeRotate = this.createShapeTypeL_90(startPosition);
+                if (newRotate === 180) newShapeRotate = this.createShapeTypeL_180(startPosition);
+                if (newRotate === 270) newShapeRotate = this.createShapeTypeL_270(startPosition); 
+                break;
+            case 'j':
+                if (newRotate === 0) newShapeRotate = this.createShapeTypeJ_0(startPosition);
+                if (newRotate === 90) newShapeRotate = this.createShapeTypeJ_90(startPosition);
+                if (newRotate === 180) newShapeRotate = this.createShapeTypeJ_180(startPosition);
+                if (newRotate === 270) newShapeRotate = this.createShapeTypeJ_270(startPosition); 
+                break;
+            case 'o':
+                newShapeRotate = this.shape;
+                break;
         }
-
-        if (this.currentType === 'z') {            
-            switch (newRotate) {
-                case 0:
-                case 180:
-                    this.shape = this.createShapeTypeZ_0(startPosition);
-                    break;
-                case 90:
-                case 270:
-                    this.shape = this.createShapeTypeZ_90(startPosition);
-                    break;
-            }
-            this.currentRotate = newRotate;
-        }
-
-        if (this.currentType === 's') {            
-            switch (newRotate) {
-                case 0:
-                case 180:
-                    this.shape = this.createShapeTypeS_0(startPosition);
-                    break;
-                case 90:
-                case 270:
-                    this.shape = this.createShapeTypeS_90(startPosition);
-                    break;
-            }
-            this.currentRotate = newRotate;
-        }
-
-        if (this.currentType === 't') {            
-            switch (newRotate) {
-                case 0:
-                    this.shape = this.createShapeTypeT_0(startPosition);
-                    break;
-                case 90:
-                    this.shape = this.createShapeTypeT_90(startPosition);
-                    break;
-                case 180:
-                    this.shape = this.createShapeTypeT_180(startPosition);
-                    break;
-                case 270:
-                    this.shape = this.createShapeTypeT_270(startPosition);
-                    break;
-            }
-            this.currentRotate = newRotate;
-        }
-
-        if (this.currentType === 'l') {            
-            switch (newRotate) {
-                case 0:
-                    this.shape = this.createShapeTypeL_0(startPosition);
-                    break;
-                case 90:
-                    this.shape = this.createShapeTypeL_90(startPosition);
-                    break;
-                case 180:
-                    this.shape = this.createShapeTypeL_180(startPosition);
-                    break;
-                case 270:
-                    this.shape = this.createShapeTypeL_270(startPosition);
-                    break;
-            }
-            this.currentRotate = newRotate;
-        }
-
-        if (this.currentType === 'j') {            
-            switch (newRotate) {
-                case 0:
-                    this.shape = this.createShapeTypeJ_0(startPosition);
-                    break;
-                case 90:
-                    this.shape = this.createShapeTypeJ_90(startPosition);
-                    break;
-                case 180:
-                    this.shape = this.createShapeTypeJ_180(startPosition);
-                    break;
-                case 270:
-                    this.shape = this.createShapeTypeJ_270(startPosition);
-                    break;
-            }
-            this.currentRotate = newRotate;
-        }
-        
-
+        return newShapeRotate;       
     } 
+
+    setNewRotation() {
+        const newShapeRotate = this.getNewRotation();
+        
+        if (this.canItRotate(newShapeRotate)) {
+            this.currentRotate = this.getNewRotateCorner();
+            this.shape = newShapeRotate;
+        }
+
+    }
 
 
 }

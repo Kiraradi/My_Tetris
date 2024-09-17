@@ -5,6 +5,13 @@
     align-items: flex-start;
 }
 
+
+.header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
 .score {
     font-size: 25px;
     font-weight: 600;
