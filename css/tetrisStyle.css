@@ -5,6 +5,29 @@
     align-items: flex-start;
 }
 
+.tetrisfield_wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.window_next_shape {
+    position: absolute;
+    right: -220px;
+    top: -33px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.windowNextShape_title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
 
 .header {
     display: flex;

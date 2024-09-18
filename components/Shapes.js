@@ -18,7 +18,7 @@ const Shapes = class {
     createShape() {
         switch (this.currentType) {
             case 'o':
-                this.shape = this.createShapeTypeO();
+                this.shape = this.createShapeTypeO(this.startPosition);
                 break;
             case 'i':
                 this.shape = this.createShapeTypeI_0(this.startPosition);
@@ -41,10 +41,10 @@ const Shapes = class {
         }
     }
 
-    createShapeTypeO() {
+    createShapeTypeO(startPosition) {
         const bodyShapeForTypeO = createArrayBySize(2, 2);
 
-        this.fillStartPosition(bodyShapeForTypeO, this.startPosition);
+        this.fillStartPosition(bodyShapeForTypeO, startPosition);
 
         return bodyShapeForTypeO;
     }
@@ -337,10 +337,11 @@ const Shapes = class {
         return this.shape[this.shape.length -1][0].pixelPosition;
     }
 
+    reposition(newStartPosition) {
+        this.shape = this.getNewRotation(newStartPosition, this.currentRotate)
+    }
 
-    getNewRotation() {
-        const newRotate = this.getNewRotateCorner();
-        const startPosition = this.getStartPositionCurrentShape();
+    getNewRotation(startPosition, newRotate) {        
         let newShapeRotate;
         switch (this.currentType) {
             case 'i':
@@ -386,14 +387,14 @@ const Shapes = class {
                 if (newRotate === 270) newShapeRotate = this.createShapeTypeJ_270(startPosition); 
                 break;
             case 'o':
-                newShapeRotate = this.shape;
+                newShapeRotate = this.createShapeTypeO(startPosition);
                 break;
         }
         return newShapeRotate;       
     } 
 
     setNewRotation() {
-        const newShapeRotate = this.getNewRotation();
+        const newShapeRotate = this.getNewRotation(this.getStartPositionCurrentShape(), this.getNewRotateCorner());
         
         if (this.canItRotate(newShapeRotate)) {
             this.currentRotate = this.getNewRotateCorner();

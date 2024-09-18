@@ -1,4 +1,5 @@
 import { createElementByTag, checkingNumber } from "../services/serveces.js";
+import WindowNextShape from "./WindowNextShape.js";
 import Shapes from "./Shapes.js";
 
 const Tetris = class {
@@ -8,14 +9,19 @@ const Tetris = class {
         this.field = null;
         this.score = 0;
         this.currentShape = null;
+        this.nextShape = null;
         this.tetrisFieldElem = null;
         this.speed = 1000;
         this.currentLevel = 1;
     }
 
     drowUI(wrapperComponent) {
-        const tetrisElem = createElementByTag('div', 'tetris');        
+        const tetrisElem = createElementByTag('div', 'tetris');
+        this.tetrisFieldWrapperElem = createElementByTag('div','tetrisfield_wrapper');
+
         this.tetrisFieldElem = createElementByTag('div', 'tetrisfield');
+
+        this.tetrisFieldWrapperElem.append(this.tetrisFieldElem);
 
         this.gameOverElem =  createElementByTag('h1', 'game_over', `GAME OVER`);
 
@@ -31,18 +37,19 @@ const Tetris = class {
         headerElem.append(this.levelElem);
         headerElem.append(this.recordElem);
 
+        this.nextShape = new WindowNextShape(this.tetrisFieldWrapperElem)
+
         this.drowUiMenu(tetrisElem);
 
         tetrisElem.append(headerElem);    
 
-        tetrisElem.append(this.tetrisFieldElem);
+        tetrisElem.append(this.tetrisFieldWrapperElem);
 
         this.initField();
         this.drowField();
         wrapperComponent.append(tetrisElem);
 
         this.subscribeToEvents();
-
     }
 
     drowUiMenu(container) {
@@ -191,15 +198,29 @@ const Tetris = class {
     initNewShape() {
         const isPlaceAvailable = this.field[this.startPositionForNewShapes.x][this.startPositionForNewShapes.y] === 0 && this.field[this.startPositionForNewShapes.x + 1][this.startPositionForNewShapes.y] === 0
         if(isPlaceAvailable) {
-            this.setNewShape(this.startPositionForNewShapes);            
+            this.setNewShape();            
         } else {
             this.gameOver();
         } 
     }
 
-    setNewShape(startPosition) {
-        this.currentShape = new Shapes(startPosition);
-        this.currentShape.canItRotate = this.canItRotate.bind(this);;
+    setNextShape() {
+        const startPosition = {x: 3, y: 0};
+        this.nextShape.installNextShape(new Shapes(startPosition));
+    }
+
+    setNewShape() {
+        if (this.nextShape.nextShape) {
+            this.currentShape = this.nextShape.nextShape;
+            this.currentShape.reposition(this.startPositionForNewShapes);
+            this.setNextShape();
+
+        } else {
+            this.currentShape = new Shapes(this.startPositionForNewShapes);
+            this.setNextShape();
+            
+        }        
+        this.currentShape.canItRotate = this.canItRotate.bind(this);
     }
 
     isShapeAtBottom() {
