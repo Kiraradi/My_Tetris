@@ -1,6 +1,8 @@
 import { createArrayBySize } from "../services/serveces.js";
+
+const types = ['i', 'o', 't', 'z', 's', 'l', 'j'];
+
 const Shapes = class {
-    types = ['i', 'o', 't', 'z', 's', 'l', 'j'];
     currentType = this.setRandomType();
     shape = null;
     currentRotate = 0;
@@ -13,7 +15,7 @@ const Shapes = class {
     }
 
     setRandomType() {
-        return this.types[Math.floor(Math.random() * this.types.length)];
+        return types[Math.floor(Math.random() * types.length)];
     }
 
     createShape() {

@@ -8,7 +8,17 @@
     <link rel="stylesheet" href="./css//tetrisStyle.css">
 </head>
 <body>
-    <div class="tetris_wrapper" id="tetris_wrapper"></div>
+    <div class="tetris_wrapper" id="tetris_wrapper">
+        <div class="tetris" id="tetris">
+            <h1 class="game_over" id="game_over">GAME OVER</h1>
+            <form class="menu" id="menu"></form>
+            <div class="header">
+                <h2 class="score" id="score">Ваш счет: 0</h2>
+                <h2 class="score" id="level">Уровень: 1</h2>
+                <h2 class="score" id="record">Рекорд: 0</h2>
+            </div>
+        </div>
+    </div>
     <script type="module" src="./components/Tetris.js"></script>
     <script type="module" src="./services/serveces.js"></script>
     <script type="module" src="./components/Shapes.js"></script>
