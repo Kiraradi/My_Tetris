@@ -1,6 +1,7 @@
 import { createElementByTag, checkingNumber } from "../services/serveces.js";
 import WindowNextShape from "./WindowNextShape.js";
 import Shapes from "./Shapes.js";
+import Pocket from "./Pocket.js";
 
 const Tetris = class {
     constructor() {
@@ -13,35 +14,41 @@ const Tetris = class {
         this.tetrisFieldElem = null;
         this.speed = 1000;
         this.currentLevel = 1;
+        this.pocket = null;
     }
 
     drowUI(wrapperComponent) {
         const tetrisElem = createElementByTag('div', 'tetris');
-        this.tetrisFieldWrapperElem = createElementByTag('div','tetrisfield_wrapper');
+        this.tetrisFieldWrapperElem = createElementByTag('div', 'tetrisfield_wrapper');
 
         this.tetrisFieldElem = createElementByTag('div', 'tetrisfield');
 
         this.tetrisFieldWrapperElem.append(this.tetrisFieldElem);
 
-        this.gameOverElem =  createElementByTag('h1', 'game_over', `GAME OVER`);
+        this.gameOverElem = createElementByTag('h1', 'game_over', `GAME OVER`);
 
-        tetrisElem.append(this.gameOverElem);   
+        const additionalFieldsWrapper = createElementByTag('div', 'additional_fields_wrapper');
 
-        this.scoreElem =  createElementByTag('h2', 'score', `Ваш счет: ${this.score}`);
-        this.recordElem = createElementByTag('h2','score', `Рекорд: ${this.getRecord()}`);
-        this.levelElem = createElementByTag('h2','score', `Уровень: ${this.currentLevel}`);
+        this.tetrisFieldWrapperElem.append(additionalFieldsWrapper)
+
+        tetrisElem.append(this.gameOverElem);
+        // todo
+        this.scoreElem = createElementByTag('h2', 'score', `Ваш счет: ${this.score}`);
+        this.recordElem = createElementByTag('h2', 'score', `Рекорд: ${this.getRecord()}`);
+        this.levelElem = createElementByTag('h2', 'score', `Уровень: ${this.currentLevel}`);
 
         const headerElem = createElementByTag('div', 'header');
 
-        headerElem.append(this.scoreElem);        
+        headerElem.append(this.scoreElem);
         headerElem.append(this.levelElem);
         headerElem.append(this.recordElem);
 
-        this.nextShape = new WindowNextShape(this.tetrisFieldWrapperElem)
+        this.nextShape = new WindowNextShape(additionalFieldsWrapper);
+        this.pocket = new Pocket(additionalFieldsWrapper);
 
         this.drowUiMenu(tetrisElem);
 
-        tetrisElem.append(headerElem);    
+        tetrisElem.append(headerElem);
 
         tetrisElem.append(this.tetrisFieldWrapperElem);
 
@@ -60,16 +67,16 @@ const Tetris = class {
         const buttonOpenInputElem = createElementByTag('button', 'button menu_button_openInput', 'Открыть меню');
 
         menuElem.append(buttonOpenInputElem);
-        
+
         const labelMenuElem = createElementByTag('label', 'menu_label', 'Введите уровень от 1 до 10');
 
         const inputMenuElem = createElementByTag('input', 'menu_input', '', 'type', 'number');
         inputMenuElem.setAttribute('placeholder', 'Например: 2');
 
         const buttonStartElem = createElementByTag('button', 'button menu_button_start', 'Начать');
-        
+
         labelMenuElem.append(inputMenuElem);
-        labelMenuElem.append(buttonStartElem);   
+        labelMenuElem.append(buttonStartElem);
 
         menuElem.append(labelMenuElem);
 
@@ -98,7 +105,7 @@ const Tetris = class {
 
             this.startGame();
 
-            if(this.currentShape) {
+            if (this.currentShape) {
                 buttonStartElem.textContent = 'Новая игра';
             }
         })
@@ -110,14 +117,14 @@ const Tetris = class {
         this.field.forEach(column => {
             const rowElem = createElementByTag('div', 'row');
             column.forEach(cell => {
-                const className = cell ? 'cell full_cell': `cell`
+                const className = cell ? 'cell full_cell' : `cell`
                 const cellElem = createElementByTag('div', className);
                 rowElem.append(cellElem);
             })
 
             this.tetrisFieldElem.append(rowElem);
         })
-    } 
+    }
 
     startGame() {
         this.initField();
@@ -135,18 +142,18 @@ const Tetris = class {
     }
 
     initField() {
-        this.field = Array.from({length: this.rowsInField},() => Array.from({length:this.columnsInField}, () => 0));
-        this.startPositionForNewShapes = {x:0, y: Math.floor(this.field[0].length / 2) - 1};
+        this.field = Array.from({ length: this.rowsInField }, () => Array.from({ length: this.columnsInField }, () => 0));
+        this.startPositionForNewShapes = { x: 0, y: Math.floor(this.field[0].length / 2) - 1 };
     }
 
     reRender() {
         this.currentShape.shape.flat().forEach(pixel => {
             if (pixel.pixelPosition.x >= 0 && pixel.pixelPosition.y >= 0) {
-                if(this.field[pixel.pixelPosition.x][pixel.pixelPosition.y] === 0 && pixel.pixelContent === 1) {
+                if (this.field[pixel.pixelPosition.x][pixel.pixelPosition.y] === 0 && pixel.pixelContent === 1) {
                     this.field[pixel.pixelPosition.x][pixel.pixelPosition.y] = pixel.pixelContent;
-                }                
+                }
             }
-        });      
+        });
 
         this.drowField();
     }
@@ -160,6 +167,7 @@ const Tetris = class {
     }
 
     onStepDown() {
+        // todo
         if (this.isShapeAtBottom()) {
             this.deleteLastPositionShape();
             this.currentShape.stepDown(this.field.length - 1);
@@ -191,21 +199,31 @@ const Tetris = class {
 
     onShapeRotation() {
         this.deleteLastPositionShape();
-        this.currentShape.setNewRotation();        
+        this.currentShape.setNewRotation();
         this.reRender();
     }
 
     initNewShape() {
+        // todo
         const isPlaceAvailable = this.field[this.startPositionForNewShapes.x][this.startPositionForNewShapes.y] === 0 && this.field[this.startPositionForNewShapes.x + 1][this.startPositionForNewShapes.y] === 0
-        if(isPlaceAvailable) {
-            this.setNewShape();            
+        if (isPlaceAvailable) {
+            this.setNewShape();
         } else {
             this.gameOver();
-        } 
+        }
+
+        // const isCheto1 = true
+        // const isCheto2 = false
+
+        // if (isCheto1 && isCheto2) {
+        //     return
+        // }
+
+        // return
     }
 
     setNextShape() {
-        const startPosition = {x: 3, y: 0};
+        const startPosition = { x: 3, y: 0 };
         this.nextShape.installNextShape(new Shapes(startPosition));
     }
 
@@ -218,13 +236,13 @@ const Tetris = class {
         } else {
             this.currentShape = new Shapes(this.startPositionForNewShapes);
             this.setNextShape();
-            
-        }        
-        this.currentShape.canItRotate = this.canItRotate.bind(this);
+
+        }
+        this.currentShape.canItInstall = this.canItInstall.bind(this);
     }
 
     isShapeAtBottom() {
-        const arrayOfFullCells = this.currentShape.findFilledCellsAtBottom();        
+        const arrayOfFullCells = this.currentShape.findFilledCellsAtBottom();
 
         const verificationArray = arrayOfFullCells.reduce((acc, pixel) => {
             const nextPositionX = pixel.pixelPosition.x + 1;
@@ -232,23 +250,27 @@ const Tetris = class {
             if (nextPositionX > this.rowsInField - 1) {
                 acc.push(false);
             } else {
-                if(nextPositionX < 0) {
+                if (nextPositionX < 0) {
                     acc.push(true);
                 } else {
                     const isCellAvailable = this.field[nextPositionX][nextPositionY] + pixel.pixelContent < 2;
 
-                    acc.push(isCellAvailable); 
+                    acc.push(isCellAvailable);
                 }
             }
 
             return acc;
         }, []);
 
-        return verificationArray.every(el => el === true)
-     }
+        return verificationArray.every(el => el === true);
+
+        // // const falsyElem = ///
+        // return Boolean(falsyElem)
+        // return falsyElem;
+    }
 
     checkLeftOffset() {
-        const arrayOfFullCells = this.currentShape.findFilledCellsOnLeft(); 
+        const arrayOfFullCells = this.currentShape.findFilledCellsOnLeft();
 
         const verificationArray = arrayOfFullCells.reduce((acc, pixel) => {
             const nextPositionX = pixel.pixelPosition.x;
@@ -261,8 +283,8 @@ const Tetris = class {
                     acc.push(true)
                 } else {
                     const isCellAvailable = this.field[nextPositionX][nextPositionY] + pixel.pixelContent < 2;
-                    acc.push(isCellAvailable); 
-                }                
+                    acc.push(isCellAvailable);
+                }
             }
 
             return acc;
@@ -279,15 +301,15 @@ const Tetris = class {
     setRecord() {
         this.getRecord() < this.score ? window.localStorage.setItem('record', this.score) : null
 
-         this.recordElem.textContent = `Рекорд: ${this.getRecord()}`;
+        this.recordElem.textContent = `Рекорд: ${this.getRecord()}`;
     }
 
     deleteFilledRows() {
         const newField = this.field.filter(row => row.some(pixel => pixel === 0));
 
         while (newField.length !== this.rowsInField) {
-            newField.unshift(Array.from({length:this.columnsInField}, () => 0));
-            this.score+=10;
+            newField.unshift(Array.from({ length: this.columnsInField }, () => 0));
+            this.score += 10;
             this.scoreElem.textContent = `Ваш счет: ${this.score}`;
             this.setRecord();
             if (this.score % 30 === 0) {
@@ -303,7 +325,7 @@ const Tetris = class {
 
     checkRightOffset() {
         const arrayOfFullCells = this.currentShape.findFilledCellsOnRight();
-        
+
         const verificationArray = arrayOfFullCells.reduce((acc, pixel) => {
             const nextPositionX = pixel.pixelPosition.x;
             const nextPositionY = pixel.pixelPosition.y + 1;
@@ -315,8 +337,8 @@ const Tetris = class {
                     acc.push(true)
                 } else {
                     const isCellAvailable = this.field[nextPositionX][nextPositionY] + pixel.pixelContent < 2;
-                    acc.push(isCellAvailable); 
-                }                
+                    acc.push(isCellAvailable);
+                }
             }
 
             return acc;
@@ -325,8 +347,8 @@ const Tetris = class {
         return verificationArray.every(el => el === true);
     }
 
-    canItRotate(newShapeRotate) {
-        return newShapeRotate.flat().every(pixel => {
+    canItInstall(newShape) {
+        return newShape.flat().every(pixel => {
             const isPositionAvailable = this.field[pixel.pixelPosition.x][pixel.pixelPosition.y] >= 0 && this.field[pixel.pixelPosition.x][pixel.pixelPosition.y] + pixel.pixelContent < 2;
             return isPositionAvailable;
         });
@@ -356,9 +378,45 @@ const Tetris = class {
     }
 
     levelUp() {
-        clearInterval(this.intervalId);       
+        clearInterval(this.intervalId);
 
         this.setInterval();
+    }
+
+    getShapeFromPocket() {
+        if(this.pocket.shapeInPocket) {
+            this.replaseShapeFromPocket();
+        } else {
+            this.setShapeInPocket();
+        }
+    }
+
+    setShapeInPocket() {
+        this.deleteLastPositionShape();
+        this.pocket.installShapeInPocket(this.currentShape);
+        this.setNewShape();
+        this.reRender();
+    }
+
+    replaseShapeFromPocket() {
+        this.deleteLastPositionShape();
+        const copyCurrentShape = this.currentShape;
+
+        const startPositionOnField = this.currentShape.getStartPositionCurrentShape();
+
+        this.currentShape = this.pocket.shapeInPocket;
+
+        this.currentShape.reposition(startPositionOnField);
+
+        if(this.canItInstall(this.currentShape.shape)) {
+
+            this.pocket.installShapeInPocket(copyCurrentShape);
+
+            this.reRender();
+            return;
+        }
+
+        this.currentShape = copyCurrentShape;
     }
 
     subscribeToEvents() {
@@ -377,7 +435,10 @@ const Tetris = class {
                 case 'ArrowUp':
                     this.onShapeRotation();
                     break;
-            }           
+                case 'Numpad0':
+                    this.getShapeFromPocket();
+                    break;
+            }
         })
     }
 }

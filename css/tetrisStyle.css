@@ -13,14 +13,29 @@
     position: relative;
 }
 
-.window_next_shape {
+.additional_fields_wrapper {
     position: absolute;
+    flex-direction: column;
     right: -220px;
     top: -33px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: center;
     gap: 10px;
+}
+
+.window_next_shape {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.pocket {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px
 }
 
 .windowNextShape_title {

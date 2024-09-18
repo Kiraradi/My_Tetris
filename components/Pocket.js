@@ -1,57 +1,59 @@
 import { createElementByTag } from "../services/serveces.js";
 
-const WindowNextShape = class {
+const Pocket = class {
     constructor(container) {
         this.container = container;
-        this.nextShape = null;
+        this.shapeInPocket = null;
         this.drowUI();
+        this.startPositionInPocket = {x: 3, y: 0};
     }
 
     drowUI() {
-        const windowNextShapeElem = createElementByTag('div', 'window_next_shape');
+        const PocketElem = createElementByTag('div', 'pocket');
 
-        const titleElem = createElementByTag('h2', 'windowNextShape_title', 'Следующая фигура');
-        
-        windowNextShapeElem.append(titleElem);
+        const PockettitleElem = createElementByTag('h2', 'pocket_title', 'Карман');
 
-        this.nextShapeFieldElem = createElementByTag('div', 'tetrisfield');
+        PocketElem.append(PockettitleElem);
 
-        windowNextShapeElem.append(this.nextShapeFieldElem);
+        this.pocketFieldElem = createElementByTag('div', 'tetrisfield');
+
+        PocketElem.append(this.pocketFieldElem);
 
         this.initField();
         this.drowField();
 
-        this.container.append(windowNextShapeElem);
+        this.container.append(PocketElem);
 
     }
 
     initField() {
-        this.fieldForWindow = Array.from({length: 4},() => Array.from({length:3}, () => 0));
+        this.fieldForWindow = Array.from({ length: 4 }, () => Array.from({ length: 4 }, () => 0));
     }
 
     drowField() {
-        this.nextShapeFieldElem.innerHTML = '';
+        this.pocketFieldElem.innerHTML = '';
 
         this.fieldForWindow.forEach(column => {
             const rowElem = createElementByTag('div', 'row');
             column.forEach(cell => {
-                const className = cell ? 'cell full_cell': `cell`;
+                const className = cell ? 'cell full_cell' : `cell`;
                 const cellElem = createElementByTag('div', className);
                 rowElem.append(cellElem);
             })
 
-            this.nextShapeFieldElem.append(rowElem);
+            this.pocketFieldElem.append(rowElem);
         })
     }
 
-    installNextShape(nextShape) {
-        this.nextShape = nextShape;
+    installShapeInPocket(shape) {
+        this.shapeInPocket = shape;
+        this.shapeInPocket.reposition(this.startPositionInPocket);
         this.reRender();
     }
 
     reRender() {
         this.initField();
-        this.nextShape.shape.flat().forEach(pixel => {
+        this.shapeInPocket.shape.flat().forEach(pixel => {
             if (pixel.pixelPosition.x >= 0 && pixel.pixelPosition.y >= 0) {
                 if(this.fieldForWindow[pixel.pixelPosition.x][pixel.pixelPosition.y] === 0 && pixel.pixelContent === 1) {
                     this.fieldForWindow[pixel.pixelPosition.x][pixel.pixelPosition.y] = pixel.pixelContent;
@@ -62,4 +64,4 @@ const WindowNextShape = class {
     }
 }
 
-export default WindowNextShape;
+export default Pocket;
